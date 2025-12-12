@@ -253,7 +253,7 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Observe elements for fade-in animation
-const animateElements = document.querySelectorAll('.service-card, .project-card, .contact-card, .stat');
+const animateElements = document.querySelectorAll('.service-card, .inventory-category, .contact-card, .stat');
 animateElements.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
