@@ -320,6 +320,32 @@ body {
     transform: translateY(-2px);
 }
 
+/* Secondary button variant for light backgrounds */
+.btn-secondary-dark {
+    background: transparent;
+    color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-secondary-dark:hover {
+    background-color: var(--primary-dark);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* Alternative secondary button for light backgrounds */
+.btn-outline-primary {
+    background: transparent;
+    color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--accent-blue);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
 /* ===========================
    Section Styles
    =========================== */
