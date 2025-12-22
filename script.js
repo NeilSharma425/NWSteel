@@ -429,4 +429,89 @@ focusStyle.textContent = `
 `;
 document.head.appendChild(focusStyle);
 
+// ===========================
+// Gallery Lightbox Functionality
+// ===========================
+
+const galleryItems = document.querySelectorAll('.gallery-item');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxClose = document.querySelector('.lightbox-close');
+const lightboxPrev = document.getElementById('lightbox-prev');
+const lightboxNext = document.getElementById('lightbox-next');
+
+let currentImageIndex = 0;
+let galleryImages = [];
+
+// Initialize gallery if on gallery page
+if (galleryItems.length > 0) {
+    // Collect all gallery images
+    galleryItems.forEach((item, index) => {
+        const fullImageSrc = item.getAttribute('data-full');
+        galleryImages.push(fullImageSrc);
+
+        // Open lightbox on click
+        item.addEventListener('click', () => {
+            openLightbox(index);
+        });
+    });
+
+    // Close lightbox
+    lightboxClose.addEventListener('click', closeLightbox);
+
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    // Previous image
+    lightboxPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showPreviousImage();
+    });
+
+    // Next image
+    lightboxNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showNextImage();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+
+        if (e.key === 'Escape') {
+            closeLightbox();
+        } else if (e.key === 'ArrowLeft') {
+            showPreviousImage();
+        } else if (e.key === 'ArrowRight') {
+            showNextImage();
+        }
+    });
+}
+
+function openLightbox(index) {
+    currentImageIndex = index;
+    lightboxImg.src = galleryImages[index];
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function showPreviousImage() {
+    currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+    lightboxImg.src = galleryImages[currentImageIndex];
+}
+
+function showNextImage() {
+    currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+    lightboxImg.src = galleryImages[currentImageIndex];
+}
+
 console.log('NW Steel website loaded successfully!');
