@@ -442,7 +442,13 @@ function initGallery() {
     const lightboxPrev = document.getElementById('lightbox-prev');
     const lightboxNext = document.getElementById('lightbox-next');
 
-    if (!galleryItems.length || !lightbox) return;
+    console.log('Gallery init - Items found:', galleryItems.length);
+    console.log('Lightbox element:', lightbox);
+
+    if (!galleryItems.length || !lightbox) {
+        console.log('Gallery or lightbox not found, skipping initialization');
+        return;
+    }
 
     let currentImageIndex = 0;
     let galleryImages = [];
@@ -454,9 +460,12 @@ function initGallery() {
 
         // Open lightbox on click
         item.addEventListener('click', () => {
+            console.log('Gallery item clicked, index:', index);
             openLightbox(index);
         });
     });
+
+    console.log('Gallery initialized with', galleryImages.length, 'images');
 
     // Close lightbox
     if (lightboxClose) {
@@ -502,10 +511,12 @@ function initGallery() {
     });
 
     function openLightbox(index) {
+        console.log('Opening lightbox with image:', galleryImages[index]);
         currentImageIndex = index;
         lightboxImg.src = galleryImages[index];
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
+        console.log('Lightbox should now be active');
     }
 
     function closeLightbox() {
