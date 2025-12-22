@@ -433,18 +433,20 @@ document.head.appendChild(focusStyle);
 // Gallery Lightbox Functionality
 // ===========================
 
-const galleryItems = document.querySelectorAll('.gallery-item');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-const lightboxClose = document.querySelector('.lightbox-close');
-const lightboxPrev = document.getElementById('lightbox-prev');
-const lightboxNext = document.getElementById('lightbox-next');
+// Initialize gallery lightbox functionality
+function initGallery() {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxClose = document.querySelector('.lightbox-close');
+    const lightboxPrev = document.getElementById('lightbox-prev');
+    const lightboxNext = document.getElementById('lightbox-next');
 
-let currentImageIndex = 0;
-let galleryImages = [];
+    if (!galleryItems.length || !lightbox) return;
 
-// Initialize gallery if on gallery page
-if (galleryItems.length > 0) {
+    let currentImageIndex = 0;
+    let galleryImages = [];
+
     // Collect all gallery images
     galleryItems.forEach((item, index) => {
         const fullImageSrc = item.getAttribute('data-full');
@@ -457,26 +459,34 @@ if (galleryItems.length > 0) {
     });
 
     // Close lightbox
-    lightboxClose.addEventListener('click', closeLightbox);
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', closeLightbox);
+    }
 
     // Close on background click
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            closeLightbox();
-        }
-    });
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
 
     // Previous image
-    lightboxPrev.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showPreviousImage();
-    });
+    if (lightboxPrev) {
+        lightboxPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showPreviousImage();
+        });
+    }
 
     // Next image
-    lightboxNext.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showNextImage();
-    });
+    if (lightboxNext) {
+        lightboxNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showNextImage();
+        });
+    }
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -490,28 +500,35 @@ if (galleryItems.length > 0) {
             showNextImage();
         }
     });
+
+    function openLightbox(index) {
+        currentImageIndex = index;
+        lightboxImg.src = galleryImages[index];
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function showPreviousImage() {
+        currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+        lightboxImg.src = galleryImages[currentImageIndex];
+    }
+
+    function showNextImage() {
+        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+        lightboxImg.src = galleryImages[currentImageIndex];
+    }
 }
 
-function openLightbox(index) {
-    currentImageIndex = index;
-    lightboxImg.src = galleryImages[index];
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    lightbox.classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function showPreviousImage() {
-    currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
-    lightboxImg.src = galleryImages[currentImageIndex];
-}
-
-function showNextImage() {
-    currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
-    lightboxImg.src = galleryImages[currentImageIndex];
+// Initialize gallery when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGallery);
+} else {
+    initGallery();
 }
 
 console.log('NW Steel website loaded successfully!');
