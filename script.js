@@ -104,22 +104,24 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-    // Get form data
-    const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData);
+        // Get form data
+        const formData = new FormData(contactForm);
+        const data = Object.fromEntries(formData);
 
-    // Show success message
-    showNotification('Thank you for your message! We will get back to you soon.', 'success');
+        // Show success message
+        showNotification('Thank you for your message! We will get back to you soon.', 'success');
 
-    // Reset form
-    contactForm.reset();
+        // Reset form
+        contactForm.reset();
 
-    // In production, you would send this data to a server
-    console.log('Form submitted:', data);
-});
+        // In production, you would send this data to a server
+        console.log('Form submitted:', data);
+    });
+}
 
 // ===========================
 // Notification System
@@ -267,17 +269,19 @@ animateElements.forEach(el => {
 
 const formInputs = document.querySelectorAll('.form-group input, .form-group textarea');
 
-formInputs.forEach(input => {
-    input.addEventListener('blur', () => {
-        validateInput(input);
-    });
-
-    input.addEventListener('input', () => {
-        if (input.classList.contains('error')) {
+if (formInputs.length > 0) {
+    formInputs.forEach(input => {
+        input.addEventListener('blur', () => {
             validateInput(input);
-        }
+        });
+
+        input.addEventListener('input', () => {
+            if (input.classList.contains('error')) {
+                validateInput(input);
+            }
+        });
     });
-});
+}
 
 function validateInput(input) {
     const value = input.value.trim();
@@ -330,29 +334,31 @@ function validateInput(input) {
 }
 
 // Validate entire form before submission
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+if (contactForm && formInputs.length > 0) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-    let isFormValid = true;
-    formInputs.forEach(input => {
-        if (!validateInput(input)) {
-            isFormValid = false;
+        let isFormValid = true;
+        formInputs.forEach(input => {
+            if (!validateInput(input)) {
+                isFormValid = false;
+            }
+        });
+
+        if (isFormValid) {
+            const formData = new FormData(contactForm);
+            const data = Object.fromEntries(formData);
+
+            showNotification('Thank you for your message! We will get back to you soon.', 'success');
+            contactForm.reset();
+
+            // In production, send data to server
+            console.log('Form submitted:', data);
+        } else {
+            showNotification('Please fill in all required fields correctly.', 'error');
         }
     });
-
-    if (isFormValid) {
-        const formData = new FormData(contactForm);
-        const data = Object.fromEntries(formData);
-
-        showNotification('Thank you for your message! We will get back to you soon.', 'success');
-        contactForm.reset();
-
-        // In production, send data to server
-        console.log('Form submitted:', data);
-    } else {
-        showNotification('Please fill in all required fields correctly.', 'error');
-    }
-});
+}
 
 // ===========================
 // Performance Optimization
