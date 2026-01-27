@@ -284,8 +284,14 @@ if (formInputs.length > 0) {
 }
 
 function validateInput(input) {
+    // Skip honeypot field
+    if (input.name === 'website') {
+        return true;
+    }
+
     const value = input.value.trim();
     const type = input.type;
+    const tagName = input.tagName.toLowerCase();
     let isValid = true;
     let errorMessage = '';
 
@@ -299,11 +305,21 @@ function validateInput(input) {
             errorMessage = 'Please enter a valid email address';
         }
     } else if (type === 'tel' && value) {
-        const phoneRegex = /^[\d\s\-\(\)\+]+$/;
+        // More flexible phone validation
+        const phoneRegex = /^[\d\s\-\(\)\+\.]+$/;
         if (!phoneRegex.test(value)) {
             isValid = false;
             errorMessage = 'Please enter a valid phone number';
+        } else if (value.replace(/\D/g, '').length < 10) {
+            isValid = false;
+            errorMessage = 'Phone number must be at least 10 digits';
         }
+    } else if (tagName === 'textarea' && value && value.length < 10) {
+        isValid = false;
+        errorMessage = 'Message must be at least 10 characters';
+    } else if (type === 'text' && input.hasAttribute('required') && value.length < 2) {
+        isValid = false;
+        errorMessage = 'Please enter at least 2 characters';
     }
 
     // Remove existing error
@@ -315,19 +331,23 @@ function validateInput(input) {
     if (!isValid) {
         input.classList.add('error');
         input.style.borderColor = '#ef4444';
+        input.setAttribute('aria-invalid', 'true');
 
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
+        errorDiv.setAttribute('role', 'alert');
         errorDiv.textContent = errorMessage;
         errorDiv.style.cssText = `
             color: #ef4444;
             font-size: 0.875rem;
             margin-top: 0.5rem;
+            animation: fadeIn 0.2s ease-out;
         `;
         input.parentElement.appendChild(errorDiv);
     } else {
         input.classList.remove('error');
         input.style.borderColor = '';
+        input.removeAttribute('aria-invalid');
     }
 
     return isValid;
@@ -338,27 +358,65 @@ if (contactForm && formInputs.length > 0) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        let isFormValid = true;
-        formInputs.forEach(input => {
-            if (!validateInput(input)) {
-                isFormValid = false;
+    // Honeypot spam protection check
+    const honeypot = contactForm.querySelector('input[name="website"]');
+    if (honeypot && honeypot.value !== '') {
+        // Silently reject spam submissions
+        console.log('Spam detected');
+        return;
+    }
+
+    let isFormValid = true;
+    let firstInvalidInput = null;
+
+    formInputs.forEach(input => {
+        if (!validateInput(input)) {
+            isFormValid = false;
+            if (!firstInvalidInput) {
+                firstInvalidInput = input;
             }
-        });
+        }
+    });
 
-        if (isFormValid) {
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData);
+    if (isFormValid) {
+        const formData = new FormData(contactForm);
+        const data = Object.fromEntries(formData);
 
+        // Remove honeypot from data
+        delete data.website;
+
+        // Disable submit button to prevent double submission
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+        submitButton.style.opacity = '0.6';
+        submitButton.style.cursor = 'not-allowed';
+
+        // Simulate submission (in production, send to server)
+        setTimeout(() => {
             showNotification('Thank you for your message! We will get back to you soon.', 'success');
             contactForm.reset();
 
+            // Re-enable submit button
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+            submitButton.style.opacity = '1';
+            submitButton.style.cursor = 'pointer';
+
             // In production, send data to server
             console.log('Form submitted:', data);
-        } else {
-            showNotification('Please fill in all required fields correctly.', 'error');
+        }, 1000);
+    } else {
+        showNotification('Please fill in all required fields correctly.', 'error');
+
+        // Focus on first invalid input
+        if (firstInvalidInput) {
+            firstInvalidInput.focus();
+            firstInvalidInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-    });
-}
+    }
+});
 
 // ===========================
 // Performance Optimization
