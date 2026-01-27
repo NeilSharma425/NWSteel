@@ -579,8 +579,11 @@ section {
     content: '▸';
     position: absolute;
     left: 0;
+    top: 50%;
+    transform: translateY(-50%);
     color: var(--accent-blue);
     font-weight: bold;
+    line-height: 1;
 }
 
 .inventory-cta {
@@ -1601,8 +1604,11 @@ section {
     content: '▸';
     position: absolute;
     left: 0;
+    top: 50%;
+    transform: translateY(-50%);
     color: var(--accent-blue);
     font-weight: bold;
+    line-height: 1;
 }
 
 /* CTA Section */
@@ -1992,8 +1998,11 @@ section {
     content: '▸';
     position: absolute;
     left: 0;
+    top: 50%;
+    transform: translateY(-50%);
     color: var(--accent-blue);
     font-weight: bold;
+    line-height: 1;
 }
 
 /* Form Enhancements */
