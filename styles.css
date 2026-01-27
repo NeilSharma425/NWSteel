@@ -996,6 +996,11 @@ section {
         gap: 1rem;
     }
 
+    /* Hide image placeholder on mobile - was causing overlap issues */
+    .about-image {
+        display: none;
+    }
+
     .stat {
         padding: 1.25rem;
     }
