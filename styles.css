@@ -400,8 +400,7 @@ section {
 }
 
 .about-image {
-    position: sticky;
-    top: 100px;
+    /* Sticky positioning removed - was causing alignment issues on home page */
 }
 
 .about-text .lead {
