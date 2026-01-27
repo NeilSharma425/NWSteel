@@ -393,20 +393,39 @@ if (contactForm && formInputs.length > 0) {
         submitButton.style.opacity = '0.6';
         submitButton.style.cursor = 'not-allowed';
 
-        // Simulate submission (in production, send to server)
-        setTimeout(() => {
-            showNotification('Thank you for your message! We will get back to you soon.', 'success');
-            contactForm.reset();
+        // Send form data to backend
+        fetch('contact-handler.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                showNotification(result.message, 'success');
+                contactForm.reset();
+            } else {
+                showNotification(result.message, 'error');
+            }
 
             // Re-enable submit button
             submitButton.disabled = false;
             submitButton.textContent = originalText;
             submitButton.style.opacity = '1';
             submitButton.style.cursor = 'pointer';
+        })
+        .catch(error => {
+            console.error('Form submission error:', error);
+            showNotification('An error occurred. Please try again or call us at (253) 531-2950.', 'error');
 
-            // In production, send data to server
-            console.log('Form submitted:', data);
-        }, 1000);
+            // Re-enable submit button
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+            submitButton.style.opacity = '1';
+            submitButton.style.cursor = 'pointer';
+        });
     } else {
         showNotification('Please fill in all required fields correctly.', 'error');
 
