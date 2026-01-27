@@ -1612,6 +1612,18 @@ section {
     text-align: center;
 }
 
+.cta-section .section-label {
+    color: var(--accent-light);
+}
+
+.cta-section .section-title {
+    color: var(--white);
+}
+
+.cta-section .section-description {
+    color: var(--gray-200);
+}
+
 .cta-content h2 {
     font-family: var(--font-heading);
     font-size: clamp(2rem, 4vw, 3rem);
