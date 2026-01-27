@@ -782,11 +782,47 @@ section {
     }
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ===========================
-   Responsive Design
+   Responsive Design - Mobile First
    =========================== */
 
-@media (max-width: 968px) {
+/* Large Desktop - 1200px+ (default styles above) */
+
+/* Desktop - 1024px to 1199px */
+@media (max-width: 1199px) {
+    :root {
+        --container-max: 1000px;
+    }
+}
+
+/* Tablet Landscape - 968px to 1023px */
+@media (max-width: 1023px) {
+    :root {
+        --container-max: 900px;
+    }
+
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .inventory-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablet Portrait - 768px to 967px */
+@media (max-width: 967px) {
     .about-content,
     .contact-content {
         grid-template-columns: 1fr;
@@ -795,14 +831,24 @@ section {
 
     .about-stats {
         grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
     }
 
-    .inventory-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    .about-image {
+        order: -1;
+    }
+
+    .hero {
+        min-height: 90vh;
+    }
+
+    .hero-content {
+        padding: 1.5rem;
     }
 }
 
-@media (max-width: 768px) {
+/* Mobile Landscape - 640px to 767px */
+@media (max-width: 767px) {
     :root {
         --container-padding: 1.5rem;
     }
@@ -811,22 +857,36 @@ section {
         padding: 4rem 0;
     }
 
+    /* Enhanced Mobile Navigation */
     .mobile-menu-toggle {
         display: flex;
+        z-index: 1001;
+    }
+
+    .nav-wrapper {
+        padding: 1rem 0;
+    }
+
+    .logo a {
+        font-size: 1.4rem;
     }
 
     .nav-menu {
         position: fixed;
         left: -100%;
-        top: 72px;
+        top: 0;
         flex-direction: column;
         background-color: rgba(26, 26, 46, 0.98);
+        backdrop-filter: blur(10px);
         width: 100%;
+        height: 100vh;
         text-align: center;
         transition: left var(--transition-normal);
-        padding: 2rem 0;
+        padding: 5rem 2rem 2rem;
         gap: 0;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        overflow-y: auto;
+        z-index: 1000;
     }
 
     .nav-menu.active {
@@ -835,57 +895,420 @@ section {
 
     .nav-menu li {
         width: 100%;
-        padding: 1rem 0;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-menu li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-link {
+        font-size: 1.25rem;
+        display: block;
+        padding: 0.5rem;
     }
 
     .nav-link::after {
         display: none;
     }
 
+    /* Hero Section Mobile */
+    .hero {
+        min-height: 85vh;
+        padding-top: 70px;
+    }
+
+    .hero-content {
+        padding: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+    }
+
     .hero-cta {
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
+        gap: 1rem;
     }
 
     .btn {
         width: 100%;
-        max-width: 300px;
+        max-width: 100%;
+        padding: 0.875rem 2rem;
     }
 
+    /* Services Grid Mobile */
     .services-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
+    .service-card {
+        padding: 2rem 1.5rem;
+    }
+
+    /* Inventory Grid Mobile */
+    .inventory-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .inventory-category {
+        padding: 1.5rem;
+    }
+
+    /* About Stats Mobile */
     .about-stats {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
 
+    .stat {
+        padding: 1.25rem;
+    }
+
+    /* Contact Cards Mobile */
+    .contact-card {
+        flex-direction: row;
+        padding: 1.25rem;
+    }
+
+    .contact-form {
+        padding: 2rem 1.5rem;
+    }
+
+    /* Footer Mobile */
     .footer-content {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
+
+    .footer {
+        padding: 3rem 0 1.5rem;
+    }
+
+    /* Section Headers Mobile */
+    .section-header {
+        margin-bottom: 3rem;
+    }
+
+    .section-label {
+        font-size: 0.8rem;
+        letter-spacing: 1.5px;
+    }
 }
 
-@media (max-width: 480px) {
+/* Mobile Portrait - 480px to 639px */
+@media (max-width: 639px) {
+    :root {
+        --container-padding: 1.25rem;
+    }
+
+    section {
+        padding: 3rem 0;
+    }
+
+    .hero {
+        min-height: 80vh;
+    }
+
     .hero-title {
         font-size: 2rem;
+        line-height: 1.3;
     }
 
     .hero-description {
         font-size: 1rem;
+        line-height: 1.6;
     }
 
     .section-title {
         font-size: 1.75rem;
     }
 
+    .section-description {
+        font-size: 1rem;
+    }
+
+    /* About Section Mobile */
+    .about-text .lead {
+        font-size: 1.1rem;
+    }
+
+    .about-text p {
+        font-size: 0.95rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    /* Service Cards Mobile */
+    .service-card {
+        padding: 1.5rem;
+    }
+
+    .service-icon {
+        width: 52px;
+        height: 52px;
+        margin-bottom: 1rem;
+    }
+
+    .service-title {
+        font-size: 1.25rem;
+    }
+
+    .service-description {
+        font-size: 0.95rem;
+    }
+
+    /* Inventory Mobile */
+    .inventory-category h3 {
+        font-size: 1.25rem;
+    }
+
+    .inventory-list li {
+        font-size: 0.95rem;
+        padding: 0.6rem 0;
+    }
+
+    /* Contact Form Mobile */
     .contact-form {
         padding: 1.5rem;
     }
 
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.95rem;
+    }
+
+    /* Contact Cards Mobile */
+    .contact-card {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
+
+    .contact-details h3 {
+        font-size: 0.95rem;
+    }
+
+    .contact-details p,
+    .contact-details a {
+        font-size: 0.9rem;
+    }
+
+    /* Footer Mobile */
+    .footer-title {
+        font-size: 1.25rem;
+    }
+
+    .footer-section h4 {
+        font-size: 1rem;
+    }
+
+    .footer-description,
+    .footer-links a,
+    .footer-contact li {
+        font-size: 0.9rem;
+    }
+}
+
+/* Small Mobile - 375px to 479px */
+@media (max-width: 479px) {
+    :root {
+        --container-padding: 1rem;
+    }
+
+    .logo a {
+        font-size: 1.2rem;
+    }
+
+    .hero {
+        padding-top: 60px;
+        min-height: 75vh;
+    }
+
+    .hero-content {
+        padding: 0.5rem;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+        margin-bottom: 0.75rem;
+    }
+
+    .hero-description {
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .section-description {
+        font-size: 0.95rem;
+    }
+
+    .about-stats {
+        gap: 0.75rem;
+    }
+
+    .stat {
+        padding: 1rem;
+    }
+
+    .stat-number {
+        font-size: 1.75rem;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
     .service-card,
-    .project-info {
-        padding: 1.5rem;
+    .inventory-category {
+        padding: 1.25rem;
+    }
+
+    .contact-form {
+        padding: 1.25rem;
+    }
+
+    .inventory-cta {
+        padding: 2rem 1.25rem;
+    }
+
+    .inventory-note {
+        font-size: 1rem;
+    }
+
+    .scroll-indicator {
+        bottom: 1rem;
+    }
+}
+
+/* Extra Small Mobile - 320px to 374px */
+@media (max-width: 374px) {
+    :root {
+        --container-padding: 0.875rem;
+    }
+
+    body {
+        font-size: 15px;
+    }
+
+    .logo a {
+        font-size: 1.1rem;
+    }
+
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-description {
+        font-size: 0.9rem;
+    }
+
+    .section-title {
+        font-size: 1.35rem;
+    }
+
+    .btn {
+        padding: 0.7rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
+    .service-card,
+    .inventory-category,
+    .contact-form {
+        padding: 1rem;
+    }
+
+    .service-title,
+    .inventory-category h3 {
+        font-size: 1.1rem;
+    }
+
+    .service-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .about-stats {
+        gap: 0.5rem;
+    }
+
+    .stat {
+        padding: 0.875rem;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+
+    .contact-icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+
+    .footer {
+        padding: 2rem 0 1rem;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero {
+        min-height: 100vh;
+        padding-top: 60px;
+    }
+
+    .hero-content {
+        padding: 1rem;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-description {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .scroll-indicator {
+        display: none;
+    }
+
+    section {
+        padding: 3rem 0;
     }
 }
 
