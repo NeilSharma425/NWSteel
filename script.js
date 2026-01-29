@@ -112,23 +112,89 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
+    const formInputs = document.querySelectorAll('.form-group input, .form-group textarea');
 
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // Get form data
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData);
+            // Honeypot spam protection check
+            const honeypot = contactForm.querySelector('input[name="website"]');
+            if (honeypot && honeypot.value !== '') {
+                // Silently reject spam submissions
+                console.log('Spam detected');
+                return;
+            }
 
-            // Show success message
-            showNotification('Thank you for your message! We will get back to you soon.', 'success');
+            let isFormValid = true;
+            let firstInvalidInput = null;
 
-            // Reset form
-            contactForm.reset();
+            formInputs.forEach(input => {
+                if (!validateInput(input)) {
+                    isFormValid = false;
+                    if (!firstInvalidInput) {
+                        firstInvalidInput = input;
+                    }
+                }
+            });
 
-            // In production, you would send this data to a server
-            console.log('Form submitted:', data);
+            if (isFormValid) {
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData);
+
+                // Remove honeypot from data
+                delete data.website;
+
+                // Disable submit button to prevent double submission
+                const submitButton = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitButton.textContent;
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
+                submitButton.style.opacity = '0.6';
+                submitButton.style.cursor = 'not-allowed';
+
+                // Send form data to backend
+                fetch('contact-handler.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        showNotification(result.message, 'success');
+                        contactForm.reset();
+                    } else {
+                        showNotification(result.message, 'error');
+                    }
+
+                    // Re-enable submit button
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    submitButton.style.opacity = '1';
+                    submitButton.style.cursor = 'pointer';
+                })
+                .catch(error => {
+                    console.error('Form submission error:', error);
+                    showNotification('An error occurred. Please try again or call us at (253) 531-2950.', 'error');
+
+                    // Re-enable submit button
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    submitButton.style.opacity = '1';
+                    submitButton.style.cursor = 'pointer';
+                });
+            } else {
+                showNotification('Please fill in all required fields correctly.', 'error');
+
+                // Focus on first invalid input
+                if (firstInvalidInput) {
+                    firstInvalidInput.focus();
+                    firstInvalidInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
         });
     }
 });
@@ -366,90 +432,6 @@ function validateInput(input) {
 
     return isValid;
 }
-
-// Validate entire form before submission
-if (contactForm && formInputs.length > 0) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-    // Honeypot spam protection check
-    const honeypot = contactForm.querySelector('input[name="website"]');
-    if (honeypot && honeypot.value !== '') {
-        // Silently reject spam submissions
-        console.log('Spam detected');
-        return;
-    }
-
-    let isFormValid = true;
-    let firstInvalidInput = null;
-
-    formInputs.forEach(input => {
-        if (!validateInput(input)) {
-            isFormValid = false;
-            if (!firstInvalidInput) {
-                firstInvalidInput = input;
-            }
-        }
-    });
-
-    if (isFormValid) {
-        const formData = new FormData(contactForm);
-        const data = Object.fromEntries(formData);
-
-        // Remove honeypot from data
-        delete data.website;
-
-        // Disable submit button to prevent double submission
-        const submitButton = contactForm.querySelector('button[type="submit"]');
-        const originalText = submitButton.textContent;
-        submitButton.disabled = true;
-        submitButton.textContent = 'Sending...';
-        submitButton.style.opacity = '0.6';
-        submitButton.style.cursor = 'not-allowed';
-
-        // Send form data to backend
-        fetch('contact-handler.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                showNotification(result.message, 'success');
-                contactForm.reset();
-            } else {
-                showNotification(result.message, 'error');
-            }
-
-            // Re-enable submit button
-            submitButton.disabled = false;
-            submitButton.textContent = originalText;
-            submitButton.style.opacity = '1';
-            submitButton.style.cursor = 'pointer';
-        })
-        .catch(error => {
-            console.error('Form submission error:', error);
-            showNotification('An error occurred. Please try again or call us at (253) 531-2950.', 'error');
-
-            // Re-enable submit button
-            submitButton.disabled = false;
-            submitButton.textContent = originalText;
-            submitButton.style.opacity = '1';
-            submitButton.style.cursor = 'pointer';
-        });
-    } else {
-        showNotification('Please fill in all required fields correctly.', 'error');
-
-        // Focus on first invalid input
-        if (firstInvalidInput) {
-            firstInvalidInput.focus();
-            firstInvalidInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }
-});
 
 // ===========================
 // Performance Optimization
