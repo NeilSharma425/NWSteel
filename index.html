@@ -282,33 +282,34 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
         <div class="container">
             <div class="nav-wrapper">
                 <div class="logo">
-                    <a href="index.html">
-                        <img src="images/northwest steel and pipe logo.jpg" alt="Northwest Steel & Pipe Logo" class="logo-image">
+                    <a href="index.html" aria-label="Northwest Steel & Pipe Inc - Home">
+                        <img src="images/northwest steel and pipe logo.jpg" alt="Northwest Steel & Pipe Inc Logo" class="logo-image">
                     </a>
                 </div>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
                 </button>
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="index.html" class="nav-link active">Home</a></li>
-                    <li><a href="about.html" class="nav-link">About</a></li>
-                    <li><a href="services.html" class="nav-link">Services</a></li>
-                    <li><a href="inventory.html" class="nav-link">Inventory</a></li>
-                    <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <ul class="nav-menu" id="navMenu" role="menu">
+                    <li role="none"><a href="index.html" class="nav-link active" role="menuitem" aria-current="page">Home</a></li>
+                    <li role="none"><a href="about.html" class="nav-link" role="menuitem">About</a></li>
+                    <li role="none"><a href="services.html" class="nav-link" role="menuitem">Services</a></li>
+                    <li role="none"><a href="inventory.html" class="nav-link" role="menuitem">Inventory</a></li>
+                    <li role="none"><a href="gallery.html" class="nav-link" role="menuitem">Gallery</a></li>
+                    <li role="none"><a href="contact.html" class="nav-link" role="menuitem">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero hero-large">
+    <main role="main">
+    <section id="home" class="hero hero-large" aria-label="Hero section">
         <div class="hero-overlay"></div>
         <div class="container">
             <div class="hero-content">
@@ -737,9 +738,10 @@
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">

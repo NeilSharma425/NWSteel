@@ -1,0 +1,14 @@
+# robots.txt for Northwest Steel & Pipe Inc
+# https://www.nwsteel.net
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.nwsteel.net/sitemap.xml
+
+# Disallow server files
+Disallow: /contact-handler.php
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1

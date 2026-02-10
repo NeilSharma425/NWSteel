@@ -27,12 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mobile menu toggle
     if (mobileMenuToggle && navMenu) {
         mobileMenuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
+            const isActive = navMenu.classList.toggle('active');
             mobileMenuToggle.classList.toggle('active');
+
+            // Update ARIA attribute for accessibility
+            mobileMenuToggle.setAttribute('aria-expanded', isActive);
 
             // Animate hamburger icon
             const spans = mobileMenuToggle.querySelectorAll('span');
-            if (navMenu.classList.contains('active')) {
+            if (isActive) {
                 spans[0].style.transform = 'rotate(45deg) translate(7px, 7px)';
                 spans[1].style.opacity = '0';
                 spans[2].style.transform = 'rotate(-45deg) translate(7px, -7px)';
@@ -48,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
                 mobileMenuToggle.classList.remove('active');
+
+                // Update ARIA attribute
+                mobileMenuToggle.setAttribute('aria-expanded', false);
 
                 const spans = mobileMenuToggle.querySelectorAll('span');
                 spans[0].style.transform = 'none';
