@@ -1329,3 +1329,75 @@ section {
 .mb-2 { margin-bottom: 1rem; }
 .mb-3 { margin-bottom: 1.5rem; }
 .mb-4 { margin-bottom: 2rem; }
+
+/* ===========================
+   Location SEO Section
+   =========================== */
+
+.location-seo {
+    padding: 5rem 0;
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+}
+
+.location-seo-content {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.location-seo-text h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+}
+
+.location-seo-text h3,
+.location-seo-details h3 {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    color: var(--primary-dark);
+    margin: 1.5rem 0 0.75rem;
+}
+
+.location-seo-text p {
+    color: var(--gray-600);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.location-list {
+    list-style: none;
+    padding: 0;
+}
+
+.location-list li {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    color: var(--gray-600);
+    position: relative;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.location-list li:last-child {
+    border-bottom: none;
+}
+
+.location-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-blue);
+    font-weight: bold;
+    line-height: 1;
+}
+
+@media (max-width: 767px) {
+    .location-seo-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
